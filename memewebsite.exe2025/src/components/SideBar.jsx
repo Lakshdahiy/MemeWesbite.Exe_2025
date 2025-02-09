@@ -10,7 +10,7 @@ const items = [
   },
   {
     title: "Profile",
-    url: "/Profile",
+    url:"/profile",
     icon: User,
   },
   {
