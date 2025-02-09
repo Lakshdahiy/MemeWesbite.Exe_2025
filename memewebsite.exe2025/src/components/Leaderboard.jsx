@@ -9,6 +9,7 @@ export default function Leaderboard() {
     const data = [
       { name: "UserA", score: 100 },
       { name: "UserB", score: 95 },
+      { name: "UserB", score: 95 },
     ];
     setLeaders(data);
   }, []);

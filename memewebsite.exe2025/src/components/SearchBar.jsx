@@ -5,22 +5,26 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
 
   const handleSearch = () => {
-    // Handle search logic here
     console.log("Searching for:", query);
   };
 
   return (
-    <div className="flex gap-2">
-      <input
-        className="border p-2"
-        type="text"
-        placeholder="Search..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <button className="bg-blue-500 text-white px-4" onClick={handleSearch}>
-        Search
-      </button>
+    <div className="flex justify-center items-center w-full">
+      <div className="relative flex items-center border-b border-gray-400 w-1/3">
+        <input
+          className="w-full p-2 bg-transparent focus:outline-none text-lg"
+          type="text"
+          placeholder="Search..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <button
+          className="ml-2 text-gray-500 hover:text-black"
+          onClick={handleSearch}
+        >
+          🔍
+        </button>
+      </div>
     </div>
   );
 }
