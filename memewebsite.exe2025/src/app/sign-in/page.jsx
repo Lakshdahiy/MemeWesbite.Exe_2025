@@ -14,13 +14,16 @@ function SignInPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/auth/signin', {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
         email,
         password,
+      }).catch((error) => {
+        console.error('Error signing in user:', error);
+        setError('Invalid email or password');
       });
       console.log('User signed in successfully:', response.data);
       // Save the token in localStorage or cookies
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('token', response.data.data.token);
       // Redirect to the home page or another protected page
       router.push('/');
     } catch (error) {

@@ -1,6 +1,6 @@
 import React, { use } from 'react';
 import Link from 'next/link';
-import { Home, Inbox, Settings, LogIn, UserPlus, BarChart2, User, Plus } from 'lucide-react'; // Adjust the import based on your actual icon library
+import { Home, Inbox, Settings, LogOut, UserPlus, BarChart2, User, Plus, Route, Router } from 'lucide-react'; // Adjust the import based on your actual icon library
 
 const items = [
   {
@@ -9,44 +9,37 @@ const items = [
     icon: Home,
   },
   {
-    title: "Profile",
-    url: "/Profile",
-    icon: User,
-  },
-  {
     title: "Create",
     url: "/create",
     icon: Plus,
   },
   {
-    title: "Sign In",
-    url: "/sign-in",
-    icon: LogIn,
-  },
-  {
-    title: "Sign Up",
-    url: "/sign-up",
-    icon: UserPlus,
-  },
-  {
-    title: "Leaderboard",
-    url: "/leaderboard",
-    icon: BarChart2,
+    title: "Profile",
+    url: "/Profile",
+    icon: User,
   },
 ];
+const handleLogout = () => {
+  localStorage.removeItem('token');
+  window.location.href = '/sign-in';
+}
 
 export default function CustomSidebar() {
   return (
-    <div className="h-screen w-64 bg-black text-white flex flex-col">
+    <div className="h-screen w-fit p-7 bg-black text-white flex flex-col items-center justify-between">
       <div className="flex items-center justify-center h-16 bg-black">
-        <img src="/exe 1.png" alt="Logo" className="h-10" /> {/* Adjust the logo path */}
+        <img src="/exe 1.png" alt="Logo" className="h-10" />
+        <h1 className='text-xl ml-3 font-bold text-white'>
+           Meme NITH
+        </h1>
       </div>
-      <nav className="flex-1 p-4">
+      <nav className="flex flex-col  h-fit p-4">
         <ul>
           {items.map((item) => (
-            <li key={item.title} className="mb-4">
+            <li key={item.title} className=" 
+             mb-8">
               <Link href={item.url} legacyBehavior>
-                <a className="flex items-center p-2 rounded hover:bg-gray-700">
+                <a className="flex  justify-center p-2 rounded hover:bg-gray-700">
                   <item.icon className="mr-2" />
                   {item.title}
                 </a>
@@ -55,6 +48,14 @@ export default function CustomSidebar() {
           ))}
         </ul>
       </nav>
-    </div>
+      
+
+      <button onClick={handleLogout} className="flex  justify-center p-2 w-fit rounded hover:bg-gray-700">
+          <LogOut className="mr-2" />
+            Log Out
+          </button>
+      </div>
+         
+    
   );
 }

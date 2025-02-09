@@ -14,7 +14,7 @@ function SignUpPage() {
   const handleRequestOtp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/auth/signup/send-otp', {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup/send-otp`, {
         email,
       });
       console.log('OTP sent successfully:', response.data);

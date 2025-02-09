@@ -1,6 +1,8 @@
+
 import type { Metadata } from "next";
+import { Toaster } from 'react-hot-toast'
 import "./globals.css";
-import  AppSidebar  from "@/components/SideBar";
+
 
 export const metadata: Metadata = {
   title: "MemeWebsite",
@@ -8,15 +10,20 @@ export const metadata: Metadata = {
 };
 
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
       <main>
+
         {children}
+
       </main>
+      <Toaster />
     </body>
     </html>
   )
 }
+
+export default Layout;
 

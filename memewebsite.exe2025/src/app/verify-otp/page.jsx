@@ -22,7 +22,7 @@ function VerifyOtpPage() {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/auth/signup', {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
         email,
         password,
         otp,
