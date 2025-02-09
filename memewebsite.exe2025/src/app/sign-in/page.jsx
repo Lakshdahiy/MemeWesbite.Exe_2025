@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import CustomSidebar from '@/components/SideBar';
+import toast from 'react-hot-toast';
 
 function SignInPage() {
   const [email, setEmail] = useState('');
@@ -13,23 +14,25 @@ function SignInPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
+  
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
         email,
         password,
-      }).catch((error) => {
-        console.error('Error signing in user:', error);
-        setError('Invalid email or password');
-      });
-      console.log('User signed in successfully:', response.data);
+      }).then((response)=>{
+        toast.success('User signed in successfully');
+        console.log('User signed in successfully:', response.data);
       // Save the token in localStorage or cookies
       localStorage.setItem('token', response.data.data.token);
-      // Redirect to the home page or another protected page
       router.push('/');
-    } catch (error) {
-      console.error('Error signing in user:', error);
-      setError('Invalid email or password');
-    }
+
+      }).catch((error) => {
+        toast.error('Error signing in user:');
+        
+      });
+      
+      // Redirect to the home page or another protected page
+     
+    
   };
 
   return (
