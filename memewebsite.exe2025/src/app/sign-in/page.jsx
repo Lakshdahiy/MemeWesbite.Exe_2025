@@ -26,7 +26,7 @@ function SignInPage() {
       router.push('/');
 
       }).catch((error) => {
-        toast.error('Error signing in user:');
+        toast.error('Error signing in user');
         
       });
       
@@ -63,11 +63,20 @@ function SignInPage() {
             </div>
             <button
               type="submit"
-              className="w-full p-2 rounded-lg bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-400 hover:to-purple-600"
+              className="w-full mt-5 p-2 rounded-lg bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-400 hover:to-purple-600"
             >
               Sign In
             </button>
           </form>
+
+          <hr className="my-4 border-gray-300" />
+          <div className="text-center">
+            <a href="/forgot-password" className="text-gray-300 hover:text-white">Forgot password?</a>
+          </div>
+          <div className="text-center mt-4 flex items-center justify-center">
+            <p className="text-gray-300">Don't have an account?</p>
+            <a href="/sign-up" className="text-purple-500 hover:text-purple-300">Sign Up</a>
+          </div>
         </div>
       </div>
     </div>

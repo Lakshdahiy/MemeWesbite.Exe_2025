@@ -20,7 +20,7 @@ export default function Leaderboard() {
   }
 
   return (
-    <div className="bg-black p-4 backdrop-blur-lg h-full ">
+    <div className="bg-black fixed p-4 backdrop-blur-lg h-full ">
       <h2 className="font-bold  m-2 text-white">Leaderboard</h2>
       <ul>
         {leaders.map((leader, i) => (

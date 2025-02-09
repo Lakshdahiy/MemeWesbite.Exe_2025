@@ -9,9 +9,7 @@ function VerifyOtpPage() {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const email = searchParams.get('email');
-  const password = searchParams.get('password');
+  
 
   useEffect(() => {
     if (!email || !password) {
@@ -60,6 +58,10 @@ function VerifyOtpPage() {
               Verify OTP
             </button>
           </form>
+          <div className="mt-4 text-center flex flex-col items-center justify-center">
+            <p className="text-gray-300">Already have an account?</p>
+            <a href="/sign-in" className="text-purple-500">Sign In</a>
+          </div>
         </div>
       </div>
     </div>

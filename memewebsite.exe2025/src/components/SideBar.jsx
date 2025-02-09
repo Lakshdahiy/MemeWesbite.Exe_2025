@@ -26,7 +26,7 @@ const handleLogout = () => {
 
 export default function CustomSidebar() {
   return (
-    <div className="h-screen w-fit p-7 bg-black text-white flex flex-col items-center justify-between">
+    <div className="h-screen fixed w-fit p-7 bg-black text-white flex flex-col items-center justify-between">
       <div className="flex items-center justify-center h-16 bg-black">
         <img src="/exe 1.png" alt="Logo" className="h-10" />
         <h1 className='text-xl ml-3 font-bold text-white'>
