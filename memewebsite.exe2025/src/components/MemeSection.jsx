@@ -8,21 +8,21 @@ function MemeSection({ memes }) {
   return (
     <div className="p-4">
       {memes.map(meme => (
-        <div key={meme._id} className="max-w-md mx-auto bg-white shadow-md rounded p-4 mb-4">
+        <div key={meme._id} className="max-w-md mx-auto  shadow-md rounded p-4 mb-4">
           <div className="flex items-center mb-3">
             <img
               src={meme.User.avatar}
               alt="User"
               className="w-8 h-8 rounded-full mr-2"
             />
-            <span className="font-semibold">{meme.User.name}</span>
+            <span className="font-semibold text-white">{meme.User.name}</span>
           </div>
           {meme.Image?<img
             src={meme.Image}
             alt="Meme"
             className="w-full h-auto mb-2"
           />:<></>}
-          <p className="text-gray-700">{meme.Caption}</p>
+          <p className="text-white">{meme.Caption}</p>
         </div>
       ))}
     </div>
