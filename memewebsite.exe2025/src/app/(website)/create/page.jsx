@@ -23,6 +23,10 @@ function create() {
     e.preventDefault();
     
     try{
+      const updatedFormData = {
+        Title: title,
+        Caption: caption,
+      }
       if (image) {
        
       
@@ -30,14 +34,12 @@ function create() {
       data.append("file", image);
       data.append("upload_preset", "trials");  
       const res = await axios.post("https://api.cloudinary.com/v1_1/dcscznqix/image/upload", data);
+      updatedFormData.Image = res.data.secure_url;
       }
       
       
-
       axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post`, {
-        Title: title,
-        Caption: caption,
-        Image: image && res?.data.secure_url||'',
+        ...updatedFormData
       }, {
         headers: headers
       }).then((response) => {
