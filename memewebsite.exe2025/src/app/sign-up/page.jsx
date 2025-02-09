@@ -46,7 +46,8 @@ function SignUpPage() {
       
     } catch (error) {
       console.log('Error requesting OTP:', error);
-      setError('Error requesting OTP');
+      toast.error(error.response.data.error)
+      setIsOtpSending(false);
     }
   };
 
