@@ -9,6 +9,11 @@ const items = [
     icon: Home,
   },
   {
+    title: "Profile",
+    url: "/Profile",
+    icon: User,
+  },
+  {
     title: "Create",
     url: "/create",
     icon: Plus,
