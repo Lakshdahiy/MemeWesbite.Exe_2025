@@ -1,6 +1,10 @@
 import React from 'react';
 
 function MemeSection({ memes }) {
+  if (!Array.isArray(memes)) {
+    return <div className="p-4 text-white">No memes available</div>;
+  }
+
   return (
     <div className="p-4">
       {memes.map(meme => (

@@ -15,7 +15,7 @@ function create() {
     formData.append('image', image);
 
     try {
-      const response = await axios.post('http://localhost:4000/api/post', formData, {
+      const response = await axios.post('http://localhost:4000/api/v1/post', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { use } from 'react';
 import Link from 'next/link';
-import { Home, Inbox, Settings, LogIn, UserPlus } from 'lucide-react'; // Adjust the import based on your actual icon library
+import { Home, Inbox, Settings, LogIn, UserPlus, BarChart2, User, Plus } from 'lucide-react'; // Adjust the import based on your actual icon library
 
 const items = [
   {
@@ -9,14 +9,14 @@ const items = [
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "/inbox",
-    icon: Inbox,
+    title: "Profile",
+    url: "/Profile",
+    icon: User,
   },
   {
     title: "Create",
     url: "/create",
-    icon: Settings,
+    icon: Plus,
   },
   {
     title: "Sign In",
@@ -28,12 +28,17 @@ const items = [
     url: "/sign-up",
     icon: UserPlus,
   },
+  {
+    title: "Leaderboard",
+    url: "/leaderboard",
+    icon: BarChart2,
+  },
 ];
 
 export default function CustomSidebar() {
   return (
     <div className="h-screen w-64 bg-black text-white flex flex-col">
-      <div className="flex items-center justify-center h-32 bg-black">
+      <div className="flex items-center justify-center h-16 bg-black">
         <img src="/exe 1.png" alt="Logo" className="h-10" /> {/* Adjust the logo path */}
       </div>
       <nav className="flex-1 p-4">
