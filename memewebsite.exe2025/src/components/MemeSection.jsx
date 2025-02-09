@@ -18,11 +18,11 @@ function MemeSection({ memes }) {
             <span className="font-semibold">{meme.userName}</span>
           </div>
           <img
-            src={meme.imageUrl}
+            src={meme.Image}
             alt="Meme"
             className="w-full h-auto mb-2"
           />
-          <p className="text-gray-700">{meme.caption}</p>
+          <p className="text-gray-700">{meme.Caption}</p>
         </div>
       ))}
     </div>

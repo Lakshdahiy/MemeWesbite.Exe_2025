@@ -4,11 +4,13 @@ import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast'
 import CustomSidebar from '@/components/SideBar';
+import { Route } from 'lucide-react';
 
 function create() {
   const [caption, setCaption] = useState('');
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState('');
+  const [isuplaoding, setIsUploading] = useState(false);
   const [headers, setHeaders] = useState({});
   useEffect(() => {
     // Check if we are running on the client side
@@ -29,12 +31,13 @@ function create() {
       }
       if (image) {
        
-      
+      setIsUploading(true);
       const data = new FormData();
       data.append("file", image);
       data.append("upload_preset", "trials");  
       const res = await axios.post("https://api.cloudinary.com/v1_1/dcscznqix/image/upload", data);
       updatedFormData.Image = res.data.secure_url;
+      setIsUploading(false);
       }
       
       
@@ -44,6 +47,10 @@ function create() {
         headers: headers
       }).then((response) => {
         toast.success('Meme uploaded successfully')
+        window.location.href = '/';
+        setCaption('');
+        setImage(null);
+        setTitle('');
       }).catch((error) => {
         console.log('Error uploading meme:', error);
       });
@@ -56,6 +63,15 @@ function create() {
   return (
     <div className="flex">
       <CustomSidebar />
+      {isuplaoding ? <div className="flex-1 flex items-center justify-center min-h-screen bg-gradient-to-r from-black to-blue-900">4
+        <div className="p-8 rounded-lg  w-full max-w-md">
+          <h1 className="text-4xl font-sans font-extrabold mb-4 text-center text-purple-400">Uploading Meme</h1>
+          <div className="flex justify-center items-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
+            </div>
+            </div>
+            </div> :
+
       <div className="flex-1 flex items-center justify-center min-h-screen bg-gradient-to-r from-black to-blue-900">
         <div className="p-8 rounded-lg  w-full max-w-md">
           <h1 className="text-4xl font-sans font-extrabold mb-4 text-center text-purple-400">Upload Meme Here</h1>
@@ -96,7 +112,7 @@ function create() {
             </button>
           </form>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

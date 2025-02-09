@@ -22,9 +22,11 @@ export default function Page() {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/post/get`);
-      setMemes(response.data);
+      setMemes(response.data.data);
+      console.log(response.data.data);  
+      
     } catch (error) {
-      console.error('Error fetching memes:', error);
+      console.log('Error fetching memes:', error);
     }
   }
 
