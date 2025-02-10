@@ -1,3 +1,4 @@
+'use client'
 import React, { useState,useEffect } from 'react';
 import Upvoteicon from '../../public/upvote.svg';
 import Upvotedicon from '../../public/upvoted.svg';

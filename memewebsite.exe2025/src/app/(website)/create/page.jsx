@@ -1,79 +1,71 @@
 'use client'
-
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast';
 import CustomSidebar from '@/components/SideBar';
-import { Route } from 'lucide-react';
+import BottomBar from '@/components/BottomBar';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-function create() {
+function CreatePage() {
+  const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
   const [image, setImage] = useState(null);
-  const [title, setTitle] = useState('');
-  const [isuplaoding, setIsUploading] = useState(false);
   const [headers, setHeaders] = useState({});
+  const isMobile = useIsMobile();
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+
   useEffect(() => {
-    // Check if we are running on the client side
     if (typeof window !== 'undefined') {
-        setHeaders({
-                               Authorization: `Bearer ${localStorage.getItem("token")}`,
-        })
+      setHeaders({
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      });
     }
-}, [])
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try{
+
+    try {
       const updatedFormData = {
         Title: title,
         Caption: caption,
-      }
+      };
       if (image) {
-       
-      setIsUploading(true);
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "trials");  
-      const res = await axios.post("https://api.cloudinary.com/v1_1/dcscznqix/image/upload", data);
-      updatedFormData.Image = res.data.secure_url;
-      setIsUploading(false);
+        const data = new FormData();
+        data.append('file', image);
+        data.append('upload_preset', 'trials');
+        const res = await axios.post('https://api.cloudinary.com/v1_1/dcscznqix/image/upload', data);
+        updatedFormData.Image = res.data.secure_url;
       }
-      
-      
-      axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post`, {
-        ...updatedFormData
-      }, {
-        headers: headers
-      }).then((response) => {
-        toast.success('Meme uploaded successfully')
-        window.location.href = '/';
-        setCaption('');
-        setImage(null);
-        setTitle('');
-      }).catch((error) => {
-        console.log('Error uploading meme:', error);
-      });
-    }
-    catch(err){
-      console.log(err)
-    }
-    
-  }
-  return (
-    <div className="flex">
-      <CustomSidebar />
-      {isuplaoding ? <div className="flex-1 flex items-center justify-center min-h-screen bg-gradient-to-r from-black to-blue-900">4
-        <div className="p-8 rounded-lg  w-full max-w-md">
-          <h1 className="text-4xl font-sans font-extrabold mb-4 text-center text-purple-400">Uploading Meme</h1>
-          <div className="flex justify-center items-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
-            </div>
-            </div>
-            </div> :
 
-      <div className="flex-1 flex items-center justify-center min-h-screen bg-gradient-to-r from-black to-blue-900">
-        <div className="p-8 rounded-lg  w-full max-w-md">
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_API_URL}/post`,
+          {
+            ...updatedFormData,
+          },
+          {
+            headers: headers,
+          }
+        )
+        .then((response) => {
+          toast.success('Meme uploaded successfully');
+          // Redirect to the home page to fetch the latest memes
+          router.push('/');
+        })
+        .catch((error) => {
+          console.log('Error uploading meme:', error);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen bg-gradient-to-r from-black to-blue-900">
+      {!isMobile && <CustomSidebar />}
+      <div className="flex-1 flex items-center justify-center p-4">
+        <div className="p-8 rounded-lg w-full max-w-md">
           <h1 className="text-4xl font-sans font-extrabold mb-4 text-center text-purple-400">Upload Meme Here</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -112,9 +104,22 @@ function create() {
             </button>
           </form>
         </div>
-      </div>}
+      </div>
+      {isMobile && (
+        <>
+          <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
+          {showLeaderboard && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4">
+              <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
+                Close
+              </button>
+              <Leaderboard leaders={leaders} />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
 
-export default create;
+export default CreatePage;
