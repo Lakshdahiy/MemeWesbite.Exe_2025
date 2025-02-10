@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Leaderboard from '../../components/Leaderboard';
-import SearchBar from '../../components/SearchBar';
 import CustomSidebar from '@/components/SideBar';
 import MemeSection from '../../components/MemeSection';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -68,20 +67,18 @@ export default function Page() {
     });
   }
   return (
-    <div className="flex min-h-screen bg-gradient-to-r from-black to-blue-900">
+    <div className="flex min-h-screen bg-black">
       <CustomSidebar />
       <div className="flex-1 flex flex-col">
-        <div className="p-4 border-b border-gray-300">
-          <SearchBar />
-        </div>
+      
         <div className="flex-1 p-4">
           <MemeSection memes={memes} user={User} handleUpvote={handleUpvote}  />
         </div>
       </div>
       {!isMobile && (
-        <div className="w-64">
-          <Leaderboard leaders={leaders} />
-        </div>
+        
+        <Leaderboard leaders={leaders} />
+       
       )}
     </div>
   );
