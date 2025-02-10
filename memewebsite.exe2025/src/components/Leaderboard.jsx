@@ -2,25 +2,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function Leaderboard() {
-  const [leaders, setLeaders] = useState([]);
+export default function Leaderboard({ leaders }) {
+  
 
-  useEffect(() => {
-    // Fetch or compute leaderboard data
-    fetchData();
-  }, []);
-  const fetchData=async()=>{
-    await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/top/10`).then((response) => {
-      console.log('Leaderboard data:', response.data);
-      setLeaders(response.data.data);
-    })
-    .catch((error) => {
-      console.log('Error fetching leaderboard:', error);
-    });
-  }
+  
+  
 
   return (
-    <div className="bg-black fixed p-4 backdrop-blur-lg h-full ">
+    <div className="bg-black fixed p-4 backdrop-blur-lg h-full w-full overflow-y-scroll"> 
       <h2 className="font-bold  m-2 text-white">Leaderboard</h2>
       <ul>
         {leaders.map((leader, i) => (

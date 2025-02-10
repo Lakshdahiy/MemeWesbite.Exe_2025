@@ -23,6 +23,7 @@ function SignInPage() {
         console.log('User signed in successfully:', response.data);
       // Save the token in localStorage or cookies
       localStorage.setItem('token', response.data.data.token);
+      localStorage.setItem('user', (response.data.data.user._id));
       router.push('/');
 
       }).catch((error) => {

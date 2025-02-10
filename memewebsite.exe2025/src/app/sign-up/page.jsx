@@ -34,21 +34,22 @@ function SignUpPage() {
   };
   const handleRequestOtp = async (e) => {
     e.preventDefault();
-    try {
+    
       setIsOtpSending(true);
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup/send-otp`, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup/send-otp`, {
         email,
-      });
-      setIsOtpSending(false);
-      setIsOtpSend(true);
-      toast.success('OTP sent successfully');
+      }).then((response)=>{
+        console.log('OTP sent successfully:', response.data);
+        setIsOtpSending(false);
+        setIsOtpSend(true);
+        toast.success('OTP sent successfully');
       // Redirect to the OTP verification page
-      
-    } catch (error) {
-      console.log('Error requesting OTP:', error);
-      toast.error(error.response.data.error)
-      setIsOtpSending(false);
-    }
+      }).catch((error) => {
+        console.log('Error requesting OTP:', error);
+        toast.error(error.response.data.error);
+        setIsOtpSending(false);
+      });
+    
   };
 
   return (
