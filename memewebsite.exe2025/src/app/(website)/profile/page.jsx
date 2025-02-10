@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import CustomSidebar from '@/components/SideBar';
+import BottomBar from '@/components/BottomBar';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 function ProfilePage() {
   const router = useRouter();
@@ -12,6 +14,8 @@ function ProfilePage() {
     name: '',
     avatar: '',
   });
+  const isMobile = useIsMobile();
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -26,26 +30,18 @@ function ProfilePage() {
         setProfile(response.data.data);
       })
       .catch(error => {
-        console.error('Error fetching profile:', error);
+        console.log('Error fetching profile:', error);
+        localStorage.removeItem('token');
+        window.location.reload();
       });
     }
   }, [router]);
 
-  const handleSaveBio = async () => {
-    const token = localStorage.getItem('token');
-    try {
-      axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`, { bio }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Error saving bio:', error);
-    }
-  };
+  
 
   return (
     <div className="flex min-h-screen bg-gradient-to-r from-black to-blue-900">
-      <CustomSidebar />
+      {!isMobile && <CustomSidebar />}
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md">
           <div className="text-center border-b border-gray-300 pb-5 mb-5">
@@ -69,7 +65,6 @@ function ProfilePage() {
             <div className="flex justify-center gap-4 mt-4">
               {isEditing ? (
                 <button
-                  onClick={handleSaveBio}
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 >
                   Save
@@ -86,6 +81,19 @@ function ProfilePage() {
           </div>
         </div>
       </div>
+      {isMobile && (
+        <>
+          <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
+          {showLeaderboard && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4">
+              <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
+                Close
+              </button>
+              <Leaderboard leaders={leaders} />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

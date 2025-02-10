@@ -5,6 +5,7 @@ import Leaderboard from '../../components/Leaderboard';
 import CustomSidebar from '@/components/SideBar';
 import MemeSection from '../../components/MemeSection';
 import { useIsMobile } from '@/hooks/use-mobile';
+import BottomBar from '@/components/BottomBar';
 import toast from 'react-hot-toast';
 
 
@@ -15,6 +16,7 @@ export default function Page() {
   const [leaders, setLeaders] = useState([]);
   const isMobile = useIsMobile();
   const[headers,setHeaders]=useState({});
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
 
   useEffect(() => {
@@ -24,6 +26,19 @@ export default function Page() {
                               Authorization: `Bearer ${localStorage.getItem("token")}`,
       })
   }
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    }).then((response) => {
+      console.log('User data:', response.data);
+
+    }).catch((error) => {
+      console.log('Error fetching user data:', error);
+      localStorage.removeItem('token');
+      window.location.href = '/sign-in';
+    });
+
     fetchDataLeader();
    
     fetchData();
@@ -53,6 +68,21 @@ export default function Page() {
     });
   }
 
+interface CommentCallback {
+  (): void;
+}
+
+const handleCommentSubmit = (id: string, comment: string, callback: CommentCallback) => {
+  axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post/comment/${id}`, { Description: comment }, {
+    headers: headers
+  }).then(() => {
+    toast.success('Comment added');
+    fetchData();
+    callback();
+  }).catch((error) => {
+    toast.error(error.response.data.error);
+  });
+}
  
 
   const handleUpvote = (id: string,upvoted: boolean) => {
@@ -68,17 +98,30 @@ export default function Page() {
   }
   return (
     <div className="flex min-h-screen bg-black">
-      <CustomSidebar />
+      {!isMobile && <CustomSidebar />}
       <div className="flex-1 flex flex-col">
       
         <div className="flex-1 p-4">
-          <MemeSection memes={memes} user={User} handleUpvote={handleUpvote}  />
+          <MemeSection memes={memes} user={User} handleUpvote={handleUpvote}  handleComment={handleCommentSubmit}  />
         </div>
       </div>
       {!isMobile && (
         
         <Leaderboard leaders={leaders} />
        
+      )}
+      {isMobile && (
+        <>
+          <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
+          {showLeaderboard && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4">
+              <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
+                Close
+              </button>
+              <Leaderboard leaders={leaders} />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

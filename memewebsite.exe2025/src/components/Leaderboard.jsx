@@ -1,9 +1,12 @@
 'use client'
-import { useState, useEffect } from "react";
-import axios from "axios";
+import BottomBar from '@/components/BottomBar';
+import React, { useState } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function Leaderboard({ leaders }) {
   
+  const isMobile = useIsMobile();
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   
   
@@ -35,6 +38,19 @@ export default function Leaderboard({ leaders }) {
           </li>
         ))}
       </ul>
+      {isMobile && (
+        <>
+          <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
+          {showLeaderboard && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4">
+              <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
+                Close
+              </button>
+              <Leaderboard leaders={leaders} />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

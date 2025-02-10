@@ -4,7 +4,8 @@ import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast'
 import CustomSidebar from '@/components/SideBar';
-import { Route } from 'lucide-react';
+import BottomBar from '@/components/BottomBar';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 function create() {
   const [caption, setCaption] = useState('');
@@ -12,6 +13,8 @@ function create() {
   const [title, setTitle] = useState('');
   const [isuplaoding, setIsUploading] = useState(false);
   const [headers, setHeaders] = useState({});
+  const isMobile = useIsMobile();
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   useEffect(() => {
     // Check if we are running on the client side
     if (typeof window !== 'undefined') {
@@ -62,7 +65,7 @@ function create() {
   }
   return (
     <div className="flex">
-      <CustomSidebar />
+      {!isMobile && <CustomSidebar />}
       {isuplaoding ? <div className="flex-1 flex items-center justify-center min-h-screen bg-gradient-to-r from-black to-blue-900">4
         <div className="p-8 rounded-lg  w-full max-w-md">
           <h1 className="text-4xl font-sans font-extrabold mb-4 text-center text-purple-400">Uploading Meme</h1>
@@ -113,6 +116,19 @@ function create() {
           </form>
         </div>
       </div>}
+      {isMobile && (
+        <>
+          <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
+          {showLeaderboard && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4">
+              <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
+                Close
+              </button>
+              <Leaderboard leaders={leaders} />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
