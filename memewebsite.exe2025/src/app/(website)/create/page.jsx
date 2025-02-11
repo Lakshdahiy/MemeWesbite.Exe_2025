@@ -52,6 +52,11 @@ function create() {
 
         setIsUploading(true);
         const data = new FormData();
+        if(image.type!=='image/gif'){
+          toast.error('Only GIF images are allowed')
+          setIsUploading(false);
+          return; 
+        }
         data.append("file", image);
         data.append("upload_preset", "trials");
         const res = await axios.post("https://api.cloudinary.com/v1_1/dcscznqix/image/upload", data);
