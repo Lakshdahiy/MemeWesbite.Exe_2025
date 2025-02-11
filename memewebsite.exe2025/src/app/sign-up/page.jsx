@@ -55,7 +55,7 @@ function SignUpPage() {
   return (
     <div className="flex">
       <CustomSidebar />
-      <div className="flex-1 flex items-center justify-center min-h-screen bg-gradient-to-r from-black to-blue-900">
+      <div className="flex-1 flex items-center justify-center min-h-screen bg-black">
         <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md">
           <h1 className="text-2xl font-bold mb-4 text-center text-white">Sign Up</h1>
           {error && <p className="text-red-500">{error}</p>}

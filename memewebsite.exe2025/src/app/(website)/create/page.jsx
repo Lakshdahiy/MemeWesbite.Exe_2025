@@ -80,9 +80,9 @@ function create() {
 
   }
   return (
-    <div className="flex">
+    <div className="flex bg-black">
       {!isMobile && <CustomSidebar />}
-      {isuplaoding ? <div className="flex-1 flex items-center justify-center min-h-screen bg-gradient-to-r from-black to-blue-900">4
+      {isuplaoding ? <div className="mx-auto md:mr-20 min-[840px]:mr-32 lg:mx-auto flex items-center justify-center min-h-screen bg-black">4
         <div className="p-8 rounded-lg  w-full max-w-md">
           <h1 className="text-4xl font-sans font-extrabold mb-4 text-center text-purple-400">Uploading Meme</h1>
           <div className="flex justify-center items-center">
@@ -91,8 +91,8 @@ function create() {
         </div>
       </div> :
 
-        <div className="flex-1 flex items-center justify-center min-h-screen bg-gradient-to-r from-black to-blue-900">
-          <div className="p-8 rounded-lg  w-full max-w-md">
+        <div className=" flex items-center mx-auto md:mr-20 min-[840px]:mr-32 lg:mx-auto justify-center min-h-screen bg-black">
+          <div className="p-8 rounded-lg  w-full max-w-md ">
             <h1 className="text-4xl font-sans font-extrabold mb-4 text-center text-purple-400">Upload Meme Here</h1>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">

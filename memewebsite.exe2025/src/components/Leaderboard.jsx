@@ -2,6 +2,12 @@
 import BottomBar from '@/components/BottomBar';
 import React, { useState } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
+function truncateString(str, maxLength) {
+  if (str.length > maxLength) {
+      return str.slice(0, maxLength) + "...";
+  }
+  return str;
+}
 
 export default function Leaderboard({ leaders ,handleOnClick}) {
   
@@ -12,7 +18,7 @@ export default function Leaderboard({ leaders ,handleOnClick}) {
   
 
   return (
-    <div className="bg-black fixed p-4 backdrop-blur-lg h-full w-1/5 right-0 overflow-y-auto scrollbar-thin no-scrollbar"> 
+    <div className="bg-black fixed p-4 backdrop-blur-lg h-full  lg:w-1/4 hidden min-[1160px]:block  right-0 overflow-y-auto scrollbar-thin no-scrollbar"> 
       <h2 className="font-bold  m-2 text-white">Leaderboard</h2>
       <ul>
         {leaders.map((leader, i) => (
@@ -23,7 +29,7 @@ export default function Leaderboard({ leaders ,handleOnClick}) {
               <span className="text-[#c084fc]">#</span>{leader.position} 
               </p>
               <span className="text-gray-400 text-md mt-1 ">
-              {leader.Title}
+              {truncateString(leader.Title, 15)}
 
               </span>
             </div>

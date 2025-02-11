@@ -21,7 +21,8 @@ export default function Page() {
   const [showMeme, setShowMeme] = useState(false);
   const [memeId, setMemeId] = useState('');
 
-
+  console.log(isMobile);
+  
   useEffect(() => {
     // Fetch data from the backend
     if (typeof window !== 'undefined') {
