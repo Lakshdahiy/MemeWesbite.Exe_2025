@@ -31,6 +31,7 @@ function SignUpPage() {
         otp,
       });
       console.log('User registered successfully:', response.data);
+      toast.success('User registered successfully');
       // Redirect to the sign-in page
       router.push('/sign-in');
     } catch (error) {
@@ -97,6 +98,7 @@ function SignUpPage() {
           {error && <p className="text-red-500">{error}</p>}
           {isotpsend && !isoptverified ? <form onSubmit={handleVerifyOtp}>
             <div className="mb-4">
+              <p className='text-sm text-yellow-500'>Please Check Your Spam Folder Also!</p>
               <label className="block text-gray-300">OTP</label>
               <input
                 type="text"

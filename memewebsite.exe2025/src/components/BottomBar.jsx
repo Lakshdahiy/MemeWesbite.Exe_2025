@@ -30,9 +30,9 @@ export default function BottomBar({ showLeaderboard, setShowLeaderboard }) {
           </a>
         </Link>
       ))}
-      <button onClick={() => setShowLeaderboard(!showLeaderboard)}>
+      {window.location.pathname==='/' &&<button onClick={() => setShowLeaderboard(!showLeaderboard)}>
         <BarChart2 className="w-6 h-6" />
-      </button>
+      </button>}
     </div>
   );
 }

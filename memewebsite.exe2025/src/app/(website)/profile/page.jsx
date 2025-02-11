@@ -131,14 +131,6 @@ function ProfilePage() {
       {isMobile && (
         <>
           <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
-          {showLeaderboard && (
-            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4">
-              <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
-                Close
-              </button>
-              <Leaderboard leaders={leaders} />
-            </div>
-          )}
         </>
       )}
     </div>
