@@ -1,13 +1,13 @@
-import React, { use, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Upvoteicon from '../../public/upvote.svg';
 import Upvotedicon from '../../public/upvoted.svg';
 import { Chat } from 'react-bootstrap-icons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'react-bootstrap-icons';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 import axios from 'axios';
 
-function MemeSection({ memes, user, handleUpvote,handleComment }) {
+function MemeSection({ showmeme, memes, user, handleUpvote,handleComment }) {
   if (!Array.isArray(memes)) {
     return <div className="p-4 text-white">No memes available</div>;
   }
@@ -15,13 +15,31 @@ function MemeSection({ memes, user, handleUpvote,handleComment }) {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState('');
   const [comment, setComment] = useState("");
   const [Comments, setComments] = useState([]);
+  const [isCommentLoading, setIsCommentLoading] = useState(false);
+  useEffect(() => {
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    }).then((response) => {
+      console.log('User data:', response.data);
+
+    }).catch((error) => {
+      console.log('Error fetching user data:', error);
+      localStorage.removeItem('token');
+      window.location.href = '/sign-in';
+    });
+  }, []);
+
   const fetchComments = async (id) => {
+    setIsCommentLoading(true);
     axios.get(`${process.env.NEXT_PUBLIC_API_URL}/post/comments/get/${id}`).then((response) => {
       setComments(response.data.data);
     }).catch((error) => {
       console.log('Error fetching comments:', error);
     }
     );
+    setIsCommentLoading(false);
       
   }
 
@@ -81,10 +99,18 @@ function MemeSection({ memes, user, handleUpvote,handleComment }) {
                     <X onClick={() => setIsCommentModalOpen(false)} style={{ fill: "white", cursor: "pointer" }} />
                   </div>
                   <div className="flex flex-col gap-2 w-full">
-                    {Comments.map(comment => (
-                      <div key={comment._id} className="bg-gray-800 p-2 rounded-lg">
+                    {isCommentLoading?<div className="text-white">Loading...</div>
+                    :Comments.map(comment => (
+                      <div key={comment._id} className="border-gray-700 border p-2 rounded-lg flex items-center gap-2">
+                        <img
+                          src={comment.User.avatar}
+                          alt="User"
+                          className="w-8 h-8 rounded-full mr-2 "
+                        />
+                        <div className='flex flex-col'>
                         <p className="text-white">{comment.User.name}</p>
                         <p className="text-white">{comment.Description}</p>
+                        </div>
                       </div>
                     ))}
                   

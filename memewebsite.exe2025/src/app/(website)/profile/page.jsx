@@ -8,14 +8,13 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 function ProfilePage() {
   const router = useRouter();
-  const [isEditing, setIsEditing] = useState(false);
-  const [bio, setBio] = useState('');
   const [profile, setProfile] = useState({
     name: '',
     avatar: '',
   });
   const isMobile = useIsMobile();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -28,6 +27,8 @@ function ProfilePage() {
       })
       .then(response => {
         setProfile(response.data.data);
+        console.log(response.data.data);  
+        
       })
       .catch(error => {
         console.log('Error fetching profile:', error);
@@ -36,14 +37,15 @@ function ProfilePage() {
       });
     }
   }, [router]);
+ 
 
   
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-r from-black to-blue-900">
+    <div className="flex items-center min-h-screen bg-black">
       {!isMobile && <CustomSidebar />}
-      <div className="flex-1 flex items-center justify-center p-4">
-        <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md">
+      <div className="flex flex-col mx-auto items-center justify-center p-4">
+        <div className="border border-gray-800 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md">
           <div className="text-center border-b border-gray-300 pb-5 mb-5">
             <div className="flex flex-col items-center">
               {profile.avatar ? (
@@ -51,36 +53,33 @@ function ProfilePage() {
               ) : (
                 <div className="w-24 h-24 rounded-full mb-3 bg-gray-300"></div>
               )}
-              <h2 className="text-2xl font-bold">{profile.name}</h2>
-              {isEditing ? (
-                <textarea
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                ></textarea>
-              ) : (
-                <p className="text-gray-600">{bio}</p>
-              )}
+              <h2 className="text-2xl font-bold text-white">{profile.name}</h2>
+          
             </div>
             <div className="flex justify-center gap-4 mt-4">
-              {isEditing ? (
-                <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                >
-                  Save
-                </button>
-              ) : (
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
-                >
-                  Edit Profile
-                </button>
-              )}
+              <span className="text-gray-400">{profile.NumberOfPosts}{profile.NumberOfPosts==1?" Post":" Posts"}</span>
+              <span className="text-gray-400">{profile.NumberofUpvotes}{profile.NumberofUpvotes==1?" Upvotes":" Upvotes"}</span>
             </div>
           </div>
-        </div>
+        </div><span className="text-white text-2xl my-5">Posts</span>
+        <div className="grid gap-3 grid-flow-col items-center justify-center p-4">
+        {profile.posts && profile.posts.map(post => (
+          <div key={post._id} className="lg:max-w-xl md:max-w-md max-w-sm mx-auto hover:scale-105 transition-all shadow-md rounded-lg px-4 py-6 mb-4 border border-gray-800">
+            <div className="flex h-40 w-40 flex-col transition-all  items-center justify-center ">
+              {post.Image?<img
+                src={post.Image}
+                alt="User"
+                className=" mr-2 "
+              />:<></>}
+              <span className="font-semibold text-white">{post.Title}</span>
+            </div>
+          </div>
+        ))}
+
       </div>
+      </div>
+      
+        
       {isMobile && (
         <>
           <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />

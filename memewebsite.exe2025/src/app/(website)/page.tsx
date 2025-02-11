@@ -7,6 +7,7 @@ import MemeSection from '../../components/MemeSection';
 import { useIsMobile } from '@/hooks/use-mobile';
 import BottomBar from '@/components/BottomBar';
 import toast from 'react-hot-toast';
+import MemeByID from '@/components/MemeByID';
 
 
 
@@ -17,6 +18,8 @@ export default function Page() {
   const isMobile = useIsMobile();
   const[headers,setHeaders]=useState({});
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showMeme, setShowMeme] = useState(false);
+  const [memeId, setMemeId] = useState('');
 
 
   useEffect(() => {
@@ -83,15 +86,25 @@ const handleCommentSubmit = (id: string, comment: string, callback: CommentCallb
     toast.error(error.response.data.error);
   });
 }
+const handleshowMeme = (id: string) => {
+  setMemeId(id);
+  setShowMeme(true);
+  console.log('Meme ID:', id);
+}
  
 
-  const handleUpvote = (id: string,upvoted: boolean) => {
+  interface UpvoteCallback {
+    (): void;
+  }
+
+  const handleUpvote = (id: string, upvoted: boolean, callback: UpvoteCallback = () => {}) => {
     axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post/upvote/${id}`, {}, {
       headers: headers
     }).then(() => {
-      toast.success(upvoted?'Upvote Removed':'Upvoted');
+      toast.success(upvoted ? 'Upvote Removed' : 'Upvoted');
       fetchDataLeader();
       fetchData();
+      callback();
     }).catch((error) => {
       toast.success(error.response.data.error);
     });
@@ -101,13 +114,17 @@ const handleCommentSubmit = (id: string, comment: string, callback: CommentCallb
       {!isMobile && <CustomSidebar />}
       <div className="flex-1 flex flex-col">
       
-        <div className="flex-1 p-4">
-          <MemeSection memes={memes} user={User} handleUpvote={handleUpvote}  handleComment={handleCommentSubmit}  />
+        <div className={`flex-1 p-4 ${showMeme ? 'hidden' : ''}`}> 
+          <MemeSection showmeme={showMeme} memes={memes} user={User} handleUpvote={handleUpvote}  handleComment={handleCommentSubmit}  />
+        </div>
+        <div className={`flex-1 p-4 ${!showMeme ? 'hidden' : ''}`}> 
+        {<MemeByID isopen={showMeme} key={memeId} memeId={memeId} user={User} handleComment={handleCommentSubmit} handleUpvote={handleUpvote} onclose={()=>setShowMeme(false)}/>}
+          
         </div>
       </div>
       {!isMobile && (
         
-        <Leaderboard leaders={leaders} />
+        <Leaderboard leaders={leaders} handleOnClick={handleshowMeme} />
        
       )}
       {isMobile && (
@@ -118,7 +135,7 @@ const handleCommentSubmit = (id: string, comment: string, callback: CommentCallb
               <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
                 Close
               </button>
-              <Leaderboard leaders={leaders} />
+              <Leaderboard leaders={leaders} handleOnClick={handleshowMeme} />
             </div>
           )}
         </>

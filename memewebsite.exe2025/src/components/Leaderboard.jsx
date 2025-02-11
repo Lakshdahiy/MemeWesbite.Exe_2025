@@ -3,7 +3,7 @@ import BottomBar from '@/components/BottomBar';
 import React, { useState } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-export default function Leaderboard({ leaders }) {
+export default function Leaderboard({ leaders ,handleOnClick}) {
   
   const isMobile = useIsMobile();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
@@ -16,7 +16,7 @@ export default function Leaderboard({ leaders }) {
       <h2 className="font-bold  m-2 text-white">Leaderboard</h2>
       <ul>
         {leaders.map((leader, i) => (
-          <li key={i} className=" rounded-lg border border-gray-900 m-2 px-5 py-2 flex justify-between items-center text-white">
+          <li key={i} onClick={()=>{handleOnClick(leader._id)}} className=" rounded-lg border border-gray-900 m-2 px-5 py-2 flex justify-between items-center text-white">
             <div className="flex flex-col">
 
             <p className="font-bold text-xl">
