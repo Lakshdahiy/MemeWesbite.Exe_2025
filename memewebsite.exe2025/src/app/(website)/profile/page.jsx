@@ -47,9 +47,9 @@ function ProfilePage() {
 
 
   return (
-    <div className=" items-center min-h-screen bg-black">
+    <div className="flex items-center min-h-screen bg-black">
       {!isMobile && <CustomSidebar />}
-      <div className="flex flex-col mx-auto md:mr-20 min-[1400px]:mr-28 lg:mx-auto  justify-center p-4">
+      <div className="flex flex-col mx-auto md:mr-20 min-[1400px]:m-auto lg:mx-auto  justify-center p-4">
         <div className="border border-gray-800 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md">
           <div className="text-center border-b border-gray-300 pb-5 mb-5">
             <div className="flex flex-col items-center">
