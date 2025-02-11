@@ -17,21 +17,21 @@ export default function Page() {
   const [User, setUser] = useState<string | null>(null);
   const [leaders, setLeaders] = useState([]);
   const isMobile = useIsMobile();
-  const[headers,setHeaders]=useState({});
+  const [headers, setHeaders] = useState({});
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showMeme, setShowMeme] = useState(false);
   const [memeId, setMemeId] = useState('');
 
   console.log(isMobile);
-  
+
   useEffect(() => {
     // Fetch data from the backend
     if (typeof window !== 'undefined') {
       setHeaders({
-                              Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       })
-  }
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`,{
+    }
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       }
@@ -45,7 +45,7 @@ export default function Page() {
     });
 
     fetchDataLeader();
-   
+
     fetchData();
     const user = localStorage.getItem('user');
     if (user) {
@@ -57,49 +57,49 @@ export default function Page() {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/post/get`);
       setMemes(response.data.data);
-      console.log(response.data.data);  
-      
+      console.log(response.data.data);
+
     } catch (error) {
       console.log('Error fetching memes:', error);
     }
   }
-  const fetchDataLeader=async()=>{
+  const fetchDataLeader = async () => {
     await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/top/10`).then((response) => {
       console.log('Leaderboard data:', response.data);
       setLeaders(response.data.data);
     })
-    .catch((error) => {
-      console.log('Error fetching leaderboard:', error);
-    });
+      .catch((error) => {
+        console.log('Error fetching leaderboard:', error);
+      });
   }
 
-interface CommentCallback {
-  (): void;
-}
+  interface CommentCallback {
+    (): void;
+  }
 
-const handleCommentSubmit = (id: string, comment: string, callback: CommentCallback) => {
-  axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post/comment/${id}`, { Description: comment }, {
-    headers: headers
-  }).then(() => {
-    toast.success('Comment added');
-    fetchData();
-    callback();
-  }).catch((error) => {
-    toast.error(error.response.data.error);
-  });
-}
-const handleshowMeme = (id: string) => {
-  setMemeId(id);
-  setShowMeme(true);
-  console.log('Meme ID:', id);
-}
- 
+  const handleCommentSubmit = (id: string, comment: string, callback: CommentCallback) => {
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post/comment/${id}`, { Description: comment }, {
+      headers: headers
+    }).then(() => {
+      toast.success('Comment added');
+      fetchData();
+      callback();
+    }).catch((error) => {
+      toast.error(error.response.data.error);
+    });
+  }
+  const handleshowMeme = (id: string) => {
+    setMemeId(id);
+    setShowMeme(true);
+    console.log('Meme ID:', id);
+  }
+
 
   interface UpvoteCallback {
     (): void;
   }
 
-  const handleUpvote = (id: string, upvoted: boolean, callback: UpvoteCallback = () => {}) => {
+  const handleUpvote = (id: string, upvoted: boolean, callback: UpvoteCallback = () => { }) => {
     axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post/upvote/${id}`, {}, {
       headers: headers
     }).then(() => {
@@ -112,15 +112,17 @@ const handleshowMeme = (id: string) => {
     });
   }
   return (
-    <>    {isMobile&&
-    <header className="fixed inset-0  w-full text-white text-center">
-          <div className="bg-black flex justify-between mx-2 md:mx-4 py-2 lg:mx-16"> 
+    <>    {isMobile &&
+          <div className='bg-black fixed w-full'>
+
+          <div className="bg-black flex justify-between text-white mx-2 md:mx-4 py-2 lg:mx-16"> 
     
-          <Image src="/exe.png" alt="logo" width={50} height={50} />
-          <h1 className="text-2xl mx-auto text-center justify-center  font-bold">MemeWebsite</h1>
-          <Image src="/exe.png" alt="logo" width={50} height={50} />
+          <Image src="/exe.png" alt="logo" width={25} height={25} />
+          <h1 className="text-2xl text-center justify-center  font-bold">MemeWebsite</h1>
+          <Image src="/exe.png" alt="logo" width={25} height={25} />
+            </div>
           </div>
-        </header>}
+          }
     <div className="flex min-h-screen bg-black">
       {!isMobile && <CustomSidebar />}
       <div className="flex-1 mt-9 flex flex-col">

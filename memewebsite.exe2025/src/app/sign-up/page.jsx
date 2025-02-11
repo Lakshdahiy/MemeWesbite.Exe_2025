@@ -84,9 +84,9 @@ function SignUpPage() {
   return (<>    {isMobile&&<header className="fixed inset-0  w-full bg-black text-white text-center py-4">
       <div className="flex justify-between mx-2 md:mx-4 lg:mx-16"> 
 
-      <Image src="/exe.png" alt="logo" width={50} height={50} />
+      <Image src="/exe.png" alt="logo" width={25} height={25} />
       <h1 className="text-2xl mx-auto text-center justify-center  font-bold">MemeWebsite</h1>
-      <Image src="/exe.png" alt="logo" width={50} height={50} />
+      <Image src="/exe.png" alt="logo" width={25} height={25} />
       </div>
     </header>}
     <div className="flex">
