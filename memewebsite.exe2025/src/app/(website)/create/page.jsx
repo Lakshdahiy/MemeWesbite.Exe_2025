@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import CustomSidebar from '@/components/SideBar';
 import BottomBar from '@/components/BottomBar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Textarea } from 'react-bootstrap-icons';
 
 function create() {
   const [caption, setCaption] = useState('');
@@ -113,7 +114,7 @@ function create() {
               </div>
               <div className="mb-4">
                 <label className="block text-white">Caption</label>
-                <input
+                <textarea
                   type="text"
                   required
                   value={caption}

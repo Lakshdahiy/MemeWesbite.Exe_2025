@@ -73,7 +73,7 @@ function ProfilePage() {
   };
 
   return (
-    <div className="flex items-center min-h-screen bg-black">
+    <div className="flex  min-h-screen bg-black">
       {!isMobile && <CustomSidebar />}
       <div className="flex flex-col mx-auto md:mr-0 min-[1400px]:m-auto items-center   lg:mx-auto  justify-center p-4">
         <div className="border border-gray-800 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -107,8 +107,7 @@ function ProfilePage() {
                   className="w-32 h-32  rounded-lg"
                 />
               )}
-              <span className="font-semibold text-white mt-5 text-center w-full ">{truncateString(post.Title, 15)}</span>
-              <span className="text-gray-500 text-xs mb-5 mt-2 overflow-y-auto w-full text-center no-scrollbar">{truncateString(post.Caption, 35)}</span>
+              <span className="font-semibold text-white mt-5 text-center w-32 text-wrap ">{post.Image?truncateString(post.Title, 15):truncateString(post.Title,60)}</span>
               <button
                 onClick={() => handleDelete(post._id)}
                 className="mt-3 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all"
