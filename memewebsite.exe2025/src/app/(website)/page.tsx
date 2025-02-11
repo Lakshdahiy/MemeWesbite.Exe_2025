@@ -1,31 +1,37 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Leaderboard from '../../components/Leaderboard';
 import CustomSidebar from '@/components/SideBar';
-import MemeSection from '../../components/MemeSection';
+import MemeSection from '@/components/MemeSection';
+import SearchBar from '@/components/SearchBar';
+import Leaderboard from '@/components/Leaderboard';
+import BottomBar from '@/components/BottomBar';
 import { useIsMobile } from '@/hooks/use-mobile';
+
 import BottomBar from '@/components/BottomBar';
 import toast from 'react-hot-toast';
 import MemeByID from '@/components/MemeByID';
 
 
-
-export default function Page() {
+function Page() {
   const [memes, setMemes] = useState([]);
   const [User, setUser] = useState<string | null>(null);
   const [leaders, setLeaders] = useState([]);
   const isMobile = useIsMobile();
+
   const[headers,setHeaders]=useState({});
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showMeme, setShowMeme] = useState(false);
   const [memeId, setMemeId] = useState('');
 
 
+
   useEffect(() => {
     // Fetch data from the backend
     if (typeof window !== 'undefined') {
       setHeaders({
+
                               Authorization: `Bearer ${localStorage.getItem("token")}`,
       })
   }
@@ -42,8 +48,8 @@ export default function Page() {
       window.location.href = '/sign-in';
     });
 
+
     fetchDataLeader();
-   
     fetchData();
     const user = localStorage.getItem('user');
     if (user) {
@@ -55,13 +61,13 @@ export default function Page() {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/post/get`);
       setMemes(response.data.data);
-      console.log(response.data.data);  
-      
+      console.log(response.data.data);
     } catch (error) {
       console.log('Error fetching memes:', error);
     }
-  }
-  const fetchDataLeader=async()=>{
+  };
+
+  const fetchDataLeader = async () => {
     await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard/top/10`).then((response) => {
       console.log('Leaderboard data:', response.data);
       setLeaders(response.data.data);
@@ -69,7 +75,8 @@ export default function Page() {
     .catch((error) => {
       console.log('Error fetching leaderboard:', error);
     });
-  }
+  };
+
 
 interface CommentCallback {
   (): void;
@@ -98,6 +105,7 @@ const handleshowMeme = (id: string) => {
   }
 
   const handleUpvote = (id: string, upvoted: boolean, callback: UpvoteCallback = () => {}) => {
+
     axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post/upvote/${id}`, {}, {
       headers: headers
     }).then(() => {
@@ -108,8 +116,10 @@ const handleshowMeme = (id: string) => {
     }).catch((error) => {
       toast.success(error.response.data.error);
     });
-  }
+  };
+
   return (
+
     <div className="flex min-h-screen bg-black">
       {!isMobile && <CustomSidebar />}
       <div className="flex-1 flex flex-col">
@@ -120,11 +130,14 @@ const handleshowMeme = (id: string) => {
         <div className={`flex-1 p-4 ${!showMeme ? 'hidden' : ''}`}> 
         {<MemeByID isopen={showMeme} key={memeId} memeId={memeId} user={User} handleComment={handleCommentSubmit} handleUpvote={handleUpvote} onclose={()=>setShowMeme(false)}/>}
           
+
         </div>
       </div>
       {!isMobile && (
         
+
         <Leaderboard leaders={leaders} handleOnClick={handleshowMeme} />
+
        
       )}
       {isMobile && (
@@ -135,7 +148,9 @@ const handleshowMeme = (id: string) => {
               <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
                 Close
               </button>
+
               <Leaderboard leaders={leaders} handleOnClick={handleshowMeme} />
+
             </div>
           )}
         </>
@@ -143,3 +158,5 @@ const handleshowMeme = (id: string) => {
     </div>
   );
 }
+
+export default Page;

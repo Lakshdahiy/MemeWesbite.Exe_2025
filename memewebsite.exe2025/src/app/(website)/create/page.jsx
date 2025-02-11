@@ -1,24 +1,23 @@
 'use client'
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast';
 import CustomSidebar from '@/components/SideBar';
 import BottomBar from '@/components/BottomBar';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-function create() {
+function CreatePage() {
+  const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
   const [image, setImage] = useState(null);
-  const [title, setTitle] = useState('');
-  const [isuplaoding, setIsUploading] = useState(false);
   const [headers, setHeaders] = useState({});
   const isMobile = useIsMobile();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+
   useEffect(() => {
-    // Check if we are running on the client side
     if (typeof window !== 'undefined') {
       setHeaders({
+
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       })
     }
@@ -40,6 +39,7 @@ function create() {
 
   }, [])
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -47,7 +47,7 @@ function create() {
       const updatedFormData = {
         Title: title,
         Caption: caption,
-      }
+      };
       if (image) {
 
         setIsUploading(true);
@@ -142,6 +142,7 @@ function create() {
               </button>
               <Leaderboard leaders={leaders} />
             </div>
+
           )}
         </>
       )}
@@ -149,4 +150,4 @@ function create() {
   );
 }
 
-export default create;
+export default CreatePage;

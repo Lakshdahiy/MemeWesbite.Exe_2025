@@ -14,7 +14,7 @@ function ProfilePage() {
   });
   const isMobile = useIsMobile();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -22,13 +22,15 @@ function ProfilePage() {
       router.push('/');
     } else {
       // Fetch user profile data
-      axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`, {
+      axios.get('http://localhost:4000/api/v1/user/profile', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(response => {
+
         setProfile(response.data.data);
         console.log(response.data.data);  
         
+
       })
       .catch(error => {
         console.log('Error fetching profile:', error);
@@ -39,6 +41,7 @@ function ProfilePage() {
   }, [router]);
  
 
+
   
 
   return (
@@ -46,6 +49,7 @@ function ProfilePage() {
       {!isMobile && <CustomSidebar />}
       <div className="flex flex-col mx-auto items-center justify-center p-4">
         <div className="border border-gray-800 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md">
+
           <div className="text-center border-b border-gray-300 pb-5 mb-5">
             <div className="flex flex-col items-center">
               {profile.avatar ? (
@@ -78,8 +82,7 @@ function ProfilePage() {
 
       </div>
       </div>
-      
-        
+
       {isMobile && (
         <>
           <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
