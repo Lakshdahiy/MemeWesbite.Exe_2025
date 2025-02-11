@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import CustomSidebar from '@/components/SideBar';
 import BottomBar from '@/components/BottomBar';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Trash2 } from 'lucide-react';
+import { Trash2,LogOut } from 'lucide-react';
+import Image from 'next/image'
 function truncateString(str, maxLength) {
   if (str.length > maxLength) {
     return str.slice(0, maxLength) + "...";
@@ -73,6 +74,7 @@ function ProfilePage() {
   };
 
   return (
+    
     <div className="flex  min-h-screen bg-black">
       {!isMobile && <CustomSidebar />}
       <div className="flex flex-col mx-auto md:mr-0 min-[1400px]:m-auto items-center   lg:mx-auto  justify-center p-4">
@@ -91,6 +93,10 @@ function ProfilePage() {
               <span className="text-gray-400">{profile.NumberOfPosts}{profile.NumberOfPosts == 1 ? " Post" : " Posts"}</span>
               <span className="text-gray-400">{profile.NumberofUpvotes}{profile.NumberofUpvotes == 1 ? " Upvotes" : " Upvotes"}</span>
             </div>
+            {isMobile&&<div className='flex justify-center mt-4'><LogOut className="w-6 h-6 text-center text-white cursor-pointer" onClick={() => {
+              localStorage.removeItem('token');
+              window.location.reload();
+            }} /></div>} 
           </div>
         </div>
         <span className="text-white text-2xl my-5">Posts</span>

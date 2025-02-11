@@ -5,12 +5,15 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import CustomSidebar from '@/components/SideBar';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const isMobile = useIsMobile();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,8 +40,16 @@ function SignInPage() {
   };
 
   return (
+    <>    {isMobile&&<header className="fixed inset-0  w-full bg-black text-white text-center py-4">
+          <div className="flex justify-between mx-2 md:mx-4 lg:mx-16"> 
+    
+          <Image src="/exe.png" alt="logo" width={50} height={50} />
+          <h1 className="text-2xl mx-auto text-center justify-center  font-bold">MemeWebsite</h1>
+          <Image src="/exe.png" alt="logo" width={50} height={50} />
+          </div>
+        </header>}
     <div className="flex">
-      <CustomSidebar />
+      {/* <CustomSidebar /> */}
       <div className="flex-1 flex items-center justify-center min-h-screen bg-black">
         <div className="bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md">
           <h1 className="text-2xl font-bold mb-4 text-center text-white">Sign In</h1>
@@ -71,16 +82,13 @@ function SignInPage() {
           </form>
 
           <hr className="my-4 border-gray-300" />
-          <div className="text-center">
-            <a href="/forgot-password" className="text-gray-300 hover:text-white">Forgot password?</a>
-          </div>
           <div className="text-center mt-4 flex items-center justify-center">
             <p className="text-gray-300">Don't have an account?</p>
             <a href="/sign-up" className="text-purple-500 hover:text-purple-300">Sign Up</a>
           </div>
         </div>
       </div>
-    </div>
+    </div></>
   );
 }
 

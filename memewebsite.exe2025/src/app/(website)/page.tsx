@@ -8,6 +8,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import BottomBar from '@/components/BottomBar';
 import toast from 'react-hot-toast';
 import MemeByID from '@/components/MemeByID';
+import Image from 'next/image';
 
 
 
@@ -111,9 +112,18 @@ const handleshowMeme = (id: string) => {
     });
   }
   return (
+    <>    {isMobile&&
+    <header className="fixed inset-0  w-full text-white text-center">
+          <div className="bg-black flex justify-between mx-2 md:mx-4 py-2 lg:mx-16"> 
+    
+          <Image src="/exe.png" alt="logo" width={50} height={50} />
+          <h1 className="text-2xl mx-auto text-center justify-center  font-bold">MemeWebsite</h1>
+          <Image src="/exe.png" alt="logo" width={50} height={50} />
+          </div>
+        </header>}
     <div className="flex min-h-screen bg-black">
       {!isMobile && <CustomSidebar />}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 mt-9 flex flex-col">
       
         <div className={`flex-1 p-4 ${showMeme ? 'hidden' : ''}`}> 
           <MemeSection showmeme={showMeme} memes={memes} user={User} handleUpvote={handleUpvote}  handleComment={handleCommentSubmit}  />
@@ -141,6 +151,6 @@ const handleshowMeme = (id: string) => {
           )}
         </>
       )}
-    </div>
+    </div></>
   );
 }
