@@ -52,8 +52,9 @@ function create() {
 
         setIsUploading(true);
         const data = new FormData();
-        if(image.type!=='image/gif'){
-          toast.error('Only GIF images are allowed')
+        console.log(image.type);
+        if(image.type!=='image/gif'&&image.type!=='image/jpeg'&&image.type!=='image/png'&&image.type!=='image/jpg'){
+          toast.error('Only GIF, png, jpeg, jpg images are allowed')
           setIsUploading(false);
           return; 
         }

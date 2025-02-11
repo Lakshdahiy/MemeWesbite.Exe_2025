@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation';
 import CustomSidebar from '@/components/SideBar';
 import BottomBar from '@/components/BottomBar';
 import { useIsMobile } from '@/hooks/use-mobile';
-import {Trash2} from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 function truncateString(str, maxLength) {
   if (str.length > maxLength) {
-      return str.slice(0, maxLength) + "...";
+    return str.slice(0, maxLength) + "...";
   }
   return str;
 }
@@ -31,46 +31,46 @@ function ProfilePage() {
     } else {
       // Fetch user profile data
       fetchData(token);
-      
+
     }
   }, [router]);
 
-function fetchData(token){
-  axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-    .then(response => {
-      setProfile(response.data.data);
-      console.log(response.data.data);
-
+  function fetchData(token) {
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`, {
+      headers: { Authorization: `Bearer ${token}` },
     })
-    .catch(error => {
-      console.log('Error fetching profile:', error);
-      localStorage.removeItem('token');
-      window.location.reload();
-    });
-}
+      .then(response => {
+        setProfile(response.data.data);
+        console.log(response.data.data);
 
-
-
-const handleDelete = async (postId) => {
-  try {
-    const token = localStorage.getItem('token');
-    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/post/delete/${postId}`,
-      {
-        headers:{
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }
-    );
-    alert("Post deleted successfully");
-    fetchData(token);
-    // Optionally, refresh the posts list or update state
-  } catch (error) {
-    console.error("Error deleting post:", error);
-    alert("Failed to delete post");
+      })
+      .catch(error => {
+        console.log('Error fetching profile:', error);
+        localStorage.removeItem('token');
+        window.location.reload();
+      });
   }
-};
+
+
+
+  const handleDelete = async (postId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/post/delete/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+      alert("Post deleted successfully");
+      fetchData(token);
+      // Optionally, refresh the posts list or update state
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      alert("Failed to delete post");
+    }
+  };
 
   return (
     <div className="flex items-center min-h-screen bg-black">
@@ -94,7 +94,7 @@ const handleDelete = async (postId) => {
           </div>
         </div>
         <span className="text-white text-2xl my-5">Posts</span>
-        <div className="grid gap-3 grid-cols-3 grid-flow-row overflow-y-auto p-4 justify-self-stretch items-start">
+        <div className="grid gap-3  grid-cols-2 lg:grid-cols-3 grid-flow-row overflow-y-auto p-4 justify-self-stretch items-start">
           {profile.posts && profile.posts.map(post => (
             <div
               key={post._id}
@@ -107,9 +107,16 @@ const handleDelete = async (postId) => {
                   className="w-32 h-32  rounded-lg"
                 />
               )}
-              <span className="font-semibold text-white mt-5 text-center w-full ">{truncateString(post.Title,15)}</span>
-              <span className="text-gray-500 text-xs mb-5 mt-2 overflow-y-auto w-full text-center no-scrollbar">{truncateString(post.Caption,35)}</span>
+              <span className="font-semibold text-white mt-5 text-center w-full ">{truncateString(post.Title, 15)}</span>
+              <span className="text-gray-500 text-xs mb-5 mt-2 overflow-y-auto w-full text-center no-scrollbar">{truncateString(post.Caption, 35)}</span>
+              <button
+                onClick={() => handleDelete(post._id)}
+                className="mt-3 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all"
+              >
+                <Trash2 />
+              </button>
             </div>
+
           ))}
         </div>
 

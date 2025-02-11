@@ -16,7 +16,7 @@ function SignInPage() {
     e.preventDefault();
   
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
-        email,
+        email:email.toLowerCase(),
         password,
       }).then((response)=>{
         toast.success('User signed in successfully');
