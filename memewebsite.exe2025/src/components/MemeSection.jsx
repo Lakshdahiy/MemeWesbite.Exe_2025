@@ -1,31 +1,62 @@
-'use client'
-import React, { useState,useEffect } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import Upvoteicon from '../../public/upvote.svg';
 import Upvotedicon from '../../public/upvoted.svg';
 import { Chat } from 'react-bootstrap-icons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'react-bootstrap-icons';
+import { format, set } from 'date-fns';
+import axios from 'axios';
 
-function MemeSection({ memes, user, handleUpvote }) {
+function MemeSection({ showmeme, memes, user, handleUpvote,handleComment }) {
   if (!Array.isArray(memes)) {
     return <div className="p-4 text-white">No memes available</div>;
   }
 
-  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState('');
   const [comment, setComment] = useState("");
+  const [Comments, setComments] = useState([]);
+  const [isCommentLoading, setIsCommentLoading] = useState(false);
+  useEffect(() => {
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    }).then((response) => {
+      console.log('User data:', response.data);
+
+    }).catch((error) => {
+      console.log('Error fetching user data:', error);
+      localStorage.removeItem('token');
+      window.location.href = '/sign-in';
+    });
+  }, []);
+
+  const fetchComments = async (id) => {
+    setIsCommentLoading(true);
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/post/comments/get/${id}`).then((response) => {
+      setComments(response.data.data);
+    }).catch((error) => {
+      console.log('Error fetching comments:', error);
+    }
+    );
+    setIsCommentLoading(false);
+      
+  }
 
   return (
     <div className="p-4">
       {memes.map(meme => (
         <div key={meme._id} className="lg:max-w-xl md:max-w-md max-w-sm mx-auto shadow-md rounded-lg px-4 py-6 mb-4 border border-gray-800">
-          <div className="flex items-center mb-5">
+          <div className="flex items-center ">
             <img
               src={meme.User.avatar}
               alt="User"
-              className="w-8 h-8 rounded-full mr-2"
+              className="w-8 h-8 rounded-full mr-2 "
             />
             <span className="font-semibold text-white">{meme.User.name}</span>
           </div>
+          <span className='text-gray-500 text-xs mb-5 ml-10'>{format(new Date(meme.createdAt), 'dd MMM yyyy')}</span>
           <h1 className="text-xl my-2 font-semibold text-white">{meme.Title}</h1>
           {meme.Image ? (
             <img
@@ -36,9 +67,9 @@ function MemeSection({ memes, user, handleUpvote }) {
           ) : (
             <></>
           )}
-          <p className="text-white">{meme.Caption}</p>
-          <div className="flex justify-start mt-4">
-            <div className="w-1/6 flex flex-col items-left">
+          <p className="text-white my-3">{meme.Caption}</p>
+          <div className="flex justify-start mt-8">
+            <div className="w-1/6 flex flex-col items-center">
               {!meme.Upvotes.includes(user) ? (
                 <Upvoteicon onClick={() => handleUpvote(meme._id, false)} style={{ fill: "white", cursor: "pointer", width: 30, height: 30 }} />
               ) : (
@@ -47,12 +78,14 @@ function MemeSection({ memes, user, handleUpvote }) {
               <span className="text-white text-xs mt-2">{meme.Upvotes.length} {meme.Upvotes.length === 1 ? "Upvote" : "Upvotes"}</span>
             </div>
             <div className="w-1/6 sm:w-1/4 flex flex-col items-center">
-              <Chat onClick={() => setIsCommentModalOpen(!isCommentModalOpen)} style={{ fill: "white", cursor: "pointer", width: 30, height: 30 }} />
+              <Chat onClick={() => {setIsCommentModalOpen(meme._id)
+              fetchComments(meme._id)
+              }} style={{ fill: "white", cursor: "pointer", width: 30, height: 30 }} />
               <span className="text-white text-xs mt-2">{meme.Comments.length} {meme.Comments.length === 1 ? "Comment" : "Comments"}</span>
             </div>
           </div>
           <AnimatePresence>
-            {isCommentModalOpen && (
+            {isCommentModalOpen==meme._id && (
               
               <motion.div
                 initial={{ translateY: -50 ,opacity: 0 }}
@@ -67,18 +100,28 @@ function MemeSection({ memes, user, handleUpvote }) {
                     <X onClick={() => setIsCommentModalOpen(false)} style={{ fill: "white", cursor: "pointer" }} />
                   </div>
                   <div className="flex flex-col gap-2 w-full">
-                    {meme.Comments.map(comment => (
-                      <div key={comment._id} className="bg-gray-800 p-2 rounded-lg">
+                    {isCommentLoading?<div className="text-white">Loading...</div>
+                    :Comments.map(comment => (
+                      <div key={comment._id} className="border-gray-700 border p-2 rounded-lg flex items-center gap-2">
+                        <img
+                          src={comment.User.avatar}
+                          alt="User"
+                          className="w-8 h-8 rounded-full mr-2 "
+                        />
+                        <div className='flex flex-col'>
                         <p className="text-white">{comment.User.name}</p>
-                        <p className="text-white">{comment.Text}</p>
+                        <p className="text-white">{comment.Description}</p>
+                        </div>
                       </div>
                     ))}
                   
                   </div>
                   <div className="flex justify-between items-center w-full mt-4">
         
-                    <input type="text" placeholder="Add a comment" className="bg-gray-800 text-white p-2 rounded-lg w-3/4" />
-                    <button  className="bg-[#c084fc] text-white text-lg p-2 rounded-lg w-1/4 ml-2">Post</button>
+                    <input type="text" value={comment} placeholder="Add a comment" className="bg-gray-800 text-white p-2 rounded-lg w-3/4"  onChange={(e)=>{setComment(e.target.value)}}/>
+                    <button onClick={()=>{handleComment(meme._id,comment,()=>{fetchComments(meme._id)})
+                      
+                    }} className="bg-[#c084fc] text-white text-lg p-2 rounded-lg w-1/4 ml-2">Post</button>
                   </div>
                 
               </motion.div>

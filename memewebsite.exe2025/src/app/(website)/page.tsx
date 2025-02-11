@@ -9,21 +9,46 @@ import Leaderboard from '@/components/Leaderboard';
 import BottomBar from '@/components/BottomBar';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+import BottomBar from '@/components/BottomBar';
+import toast from 'react-hot-toast';
+import MemeByID from '@/components/MemeByID';
+
+
 function Page() {
   const [memes, setMemes] = useState([]);
   const [User, setUser] = useState<string | null>(null);
   const [leaders, setLeaders] = useState([]);
   const isMobile = useIsMobile();
-  const [headers, setHeaders] = useState({});
+
+  const[headers,setHeaders]=useState({});
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showMeme, setShowMeme] = useState(false);
+  const [memeId, setMemeId] = useState('');
+
+
 
   useEffect(() => {
     // Fetch data from the backend
     if (typeof window !== 'undefined') {
       setHeaders({
+
+                              Authorization: `Bearer ${localStorage.getItem("token")}`,
+      })
+  }
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/auth`,{
+      headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-      });
-    }
+      }
+    }).then((response) => {
+      console.log('User data:', response.data);
+
+    }).catch((error) => {
+      console.log('Error fetching user data:', error);
+      localStorage.removeItem('token');
+      window.location.href = '/sign-in';
+    });
+
+
     fetchDataLeader();
     fetchData();
     const user = localStorage.getItem('user');
@@ -52,30 +77,67 @@ function Page() {
     });
   };
 
-  const handleUpvote = (id: string, upvoted: boolean) => {
+
+interface CommentCallback {
+  (): void;
+}
+
+const handleCommentSubmit = (id: string, comment: string, callback: CommentCallback) => {
+  axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post/comment/${id}`, { Description: comment }, {
+    headers: headers
+  }).then(() => {
+    toast.success('Comment added');
+    fetchData();
+    callback();
+  }).catch((error) => {
+    toast.error(error.response.data.error);
+  });
+}
+const handleshowMeme = (id: string) => {
+  setMemeId(id);
+  setShowMeme(true);
+  console.log('Meme ID:', id);
+}
+ 
+
+  interface UpvoteCallback {
+    (): void;
+  }
+
+  const handleUpvote = (id: string, upvoted: boolean, callback: UpvoteCallback = () => {}) => {
+
     axios.post(`${process.env.NEXT_PUBLIC_API_URL}/post/upvote/${id}`, {}, {
       headers: headers
     }).then(() => {
       toast.success(upvoted ? 'Upvote Removed' : 'Upvoted');
       fetchDataLeader();
       fetchData();
+      callback();
     }).catch((error) => {
       toast.success(error.response.data.error);
     });
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-r from-black to-blue-900">
+
+    <div className="flex min-h-screen bg-black">
       {!isMobile && <CustomSidebar />}
       <div className="flex-1 flex flex-col">
       
-        <div className="flex-1 p-4">
-          <MemeSection memes={memes} user={User} handleUpvote={handleUpvote} />
+        <div className={`flex-1 p-4 ${showMeme ? 'hidden' : ''}`}> 
+          <MemeSection showmeme={showMeme} memes={memes} user={User} handleUpvote={handleUpvote}  handleComment={handleCommentSubmit}  />
+        </div>
+        <div className={`flex-1 p-4 ${!showMeme ? 'hidden' : ''}`}> 
+        {<MemeByID isopen={showMeme} key={memeId} memeId={memeId} user={User} handleComment={handleCommentSubmit} handleUpvote={handleUpvote} onclose={()=>setShowMeme(false)}/>}
+          
+
         </div>
       </div>
       {!isMobile && (
         
-      <Leaderboard leaders={leaders} />
+
+        <Leaderboard leaders={leaders} handleOnClick={handleshowMeme} />
+
        
       )}
       {isMobile && (
@@ -86,20 +148,9 @@ function Page() {
               <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
                 Close
               </button>
-              <Leaderboard leaders={leaders} />
-            </div>
-          )}
-        </>
-      )}
-      {isMobile && (
-        <>
-          <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
-          {showLeaderboard && (
-            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4">
-              <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
-                Close
-              </button>
-              <Leaderboard leaders={leaders} />
+
+              <Leaderboard leaders={leaders} handleOnClick={handleshowMeme} />
+
             </div>
           )}
         </>
