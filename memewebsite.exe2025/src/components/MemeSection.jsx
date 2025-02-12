@@ -68,7 +68,7 @@ function MemeSection({ showmeme, memes, user, handleUpvote,handleComment }) {
           )}
           <p className="text-white my-3 overflow-x-auto no-scrollbar">{meme.Caption}</p>
           <div className="flex justify-start mt-8">
-            <div className="md:w-1/6 w-1/4 flex flex-col items-center">
+            <div className="md:w-1/6 w-1/2 flex flex-col justify-between md:justify-start items-center">
               {!meme.Upvotes.includes(user) ? (
                 <Upvoteicon onClick={() => handleUpvote(meme._id, false)} style={{ fill: "white", cursor: "pointer", width: 30, height: 30 }} />
               ) : (
@@ -76,7 +76,7 @@ function MemeSection({ showmeme, memes, user, handleUpvote,handleComment }) {
               )}
               <span className="text-white text-xs mt-2">{meme.Upvotes.length} {meme.Upvotes.length === 1 ? "Upvote" : "Upvotes"}</span>
             </div>
-            <div className="md:w-1/6 w-1/4 flex flex-col items-center">
+            <div className="md:w-1/6 w-1/2 flex flex-col justify-between md:justify-start items-center">
               <Chat onClick={() => {setIsCommentModalOpen(meme._id)
               fetchComments(meme._id)
               }} style={{ fill: "white", cursor: "pointer", width: 30, height: 30 }} />
@@ -98,7 +98,7 @@ function MemeSection({ showmeme, memes, user, handleUpvote,handleComment }) {
                     <h1 className="text-white font-bold">Comments</h1>
                     <X onClick={() => setIsCommentModalOpen(false)} style={{ fill: "white", cursor: "pointer" }} />
                   </div>
-                  <div className="flex flex-col gap-2 w-full">
+                  <div className="flex flex-col max-h-44 no-scrollbar overflow-y-auto gap-2 w-full">
                     {isCommentLoading?<div className="text-white">Loading...</div>
                     :Comments.map(comment => (
                       <div key={comment._id} className="border-gray-700 border p-2 rounded-lg flex items-center gap-2">
@@ -118,7 +118,9 @@ function MemeSection({ showmeme, memes, user, handleUpvote,handleComment }) {
                   <div className="flex justify-between items-center w-full mt-4">
         
                     <input type="text" value={comment} placeholder="Add a comment" className="bg-gray-800 text-white p-2 rounded-lg w-3/4"  onChange={(e)=>{setComment(e.target.value)}}/>
-                    <button onClick={()=>{handleComment(meme._id,comment,()=>{fetchComments(meme._id)})
+                    <button onClick={()=>{handleComment(meme._id,comment,()=>{fetchComments(meme._id)
+                      setComment('')
+                    })
                       
                     }} className="bg-[#c084fc] text-white text-lg p-2 rounded-lg w-1/4 ml-2">Post</button>
                   </div>

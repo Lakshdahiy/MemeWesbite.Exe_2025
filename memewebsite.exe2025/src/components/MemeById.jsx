@@ -84,7 +84,7 @@ function MemeByID({ isopen, memeId, user, handleUpvote, handleComment, onclose }
             )}
             <p className="text-white my-3 overflow-x-auto no-scrollbar">{meme.Caption}</p>
             <div className="flex justify-start mt-8">
-                <div className="md:w-1/6 w-1/4 flex flex-col items-center">
+                <div className="md:w-1/6 w-1/2 flex flex-col justify-between md:justify-start items-center">
                     {!meme.Upvotes.includes(user) ? (
                         <Upvoteicon onClick={() => handleUpvote(meme._id, false,()=>{
                             fetchMeme(meme._id)
@@ -96,7 +96,7 @@ function MemeByID({ isopen, memeId, user, handleUpvote, handleComment, onclose }
                     )}
                     <span className="text-white text-xs mt-2">{meme.Upvotes.length} {meme.Upvotes.length === 1 ? "Upvote" : "Upvotes"}</span>
                 </div>
-                <div className="md:w-1/6 w-1/4 flex flex-col items-center">
+                <div className="md:w-1/6 w-1/2 flex flex-col justify-between md:justify-start items-center">
                     <Chat onClick={() => {
                         setIsCommentModalOpen(meme._id)
                         fetchComments(meme._id)
@@ -119,7 +119,7 @@ function MemeByID({ isopen, memeId, user, handleUpvote, handleComment, onclose }
                             <h1 className="text-white font-bold">Comments</h1>
                             <X onClick={() => setIsCommentModalOpen(false)} style={{ fill: "white", cursor: "pointer" }} />
                         </div>
-                        <div className="flex flex-col gap-2 w-full">
+                        <div className="flex flex-col gap-2 max-h-44 no-scrollbar overflow-y-auto w-full">
                             {isCommentLoading ? <div className="text-white">Loading...</div>
                                 : Comments.map(comment => (
                                     <div key={comment._id} className="border-gray-700 border p-2 rounded-lg flex items-center gap-2">
