@@ -7,8 +7,9 @@ import CustomSidebar from '@/components/SideBar';
 import BottomBar from '@/components/BottomBar';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Textarea } from 'react-bootstrap-icons';
+import LeaderPageMobile from '@/components/LeaderPageMobile';
 
-function create() {
+function create({leaders}) {
   const [caption, setCaption] = useState('');
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState('');
@@ -147,7 +148,7 @@ function create() {
               <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
                 Close
               </button>
-              <Leaderboard leaders={leaders} />
+             <LeaderPageMobile leaders={leaders || []} /> 
             </div>
           )}
         </>

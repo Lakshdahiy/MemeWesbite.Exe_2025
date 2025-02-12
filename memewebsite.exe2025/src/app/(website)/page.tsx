@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Leaderboard from '../../components/Leaderboard';
+import LeaderPageMobile from '../../components/LeaderPageMobile';
 import CustomSidebar from '@/components/SideBar';
 import MemeSection from '../../components/MemeSection';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -144,11 +145,11 @@ export default function Page() {
         <>
           <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
           {showLeaderboard && (
-            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4">
+            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4 backdrop-blur-lg h-full lg:w-1/4 right-0 overflow-y-auto  items-center justify-center">
               <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
                 Close
               </button>
-              <Leaderboard leaders={leaders} handleOnClick={handleshowMeme} />
+              <LeaderPageMobile leaders={leaders} handleOnClick={handleshowMeme} />
             </div>
           )}
         </>
