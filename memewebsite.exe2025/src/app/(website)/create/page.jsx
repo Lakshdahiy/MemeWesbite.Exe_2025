@@ -9,8 +9,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import LeaderboardMobile from '@/components/LeaderPageMobile';
 
 
-
-function create() {
+function create({leaders}) {
   const [caption, setCaption] = useState('');
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState('');
@@ -142,6 +141,7 @@ function create() {
           </div>
         </div>}
       {isMobile && (
+
               <>
                 <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
               </>

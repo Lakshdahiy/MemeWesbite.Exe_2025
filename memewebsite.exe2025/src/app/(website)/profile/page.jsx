@@ -7,6 +7,8 @@ import BottomBar from '@/components/BottomBar';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Trash2,LogOut } from 'lucide-react';
 import Image from 'next/image'
+import Leaderboard from '@/components/Leaderboard'; 
+import LeaderPageMobile from '@/components/LeaderPageMobile';
 function truncateString(str, maxLength) {
   if (str.length > maxLength) {
     return str.slice(0, maxLength) + "...";
@@ -15,7 +17,7 @@ function truncateString(str, maxLength) {
 }
 
 
-function ProfilePage() {
+function ProfilePage({leaders,handleOnClick}) {
   const router = useRouter();
   const [profile, setProfile] = useState({
     name: '',
@@ -131,6 +133,7 @@ function ProfilePage() {
       {isMobile && (
         <>
           <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
+
         </>
       )}
     </div>
