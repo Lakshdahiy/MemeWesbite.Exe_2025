@@ -6,8 +6,8 @@ import toast, { Toaster } from 'react-hot-toast'
 import CustomSidebar from '@/components/SideBar';
 import BottomBar from '@/components/BottomBar';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Textarea } from 'react-bootstrap-icons';
-import LeaderPageMobile from '@/components/LeaderPageMobile';
+import LeaderboardMobile from '@/components/LeaderPageMobile';
+
 
 function create({leaders}) {
   const [caption, setCaption] = useState('');
@@ -141,18 +141,11 @@ function create({leaders}) {
           </div>
         </div>}
       {isMobile && (
-        <>
-          <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
-          {showLeaderboard && (
-            <div className="fixed inset-0 bg-black bg-opacity-75 z-50 p-4">
-              <button onClick={() => setShowLeaderboard(false)} className="absolute top-4 right-4 text-white">
-                Close
-              </button>
-             <LeaderPageMobile leaders={leaders || []} /> 
-            </div>
-          )}
-        </>
-      )}
+
+              <>
+                <BottomBar showLeaderboard={showLeaderboard} setShowLeaderboard={setShowLeaderboard} />
+              </>
+            )}
     </div>
   );
 }
